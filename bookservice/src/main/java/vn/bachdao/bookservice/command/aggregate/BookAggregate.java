@@ -10,7 +10,11 @@ import org.axonframework.modelling.command.AggregateLifecycle;
 import org.axonframework.spring.stereotype.Aggregate;
 import org.springframework.beans.BeanUtils;
 import vn.bachdao.bookservice.command.command.CreateBookCommand;
+import vn.bachdao.bookservice.command.command.DeleteBookCommand;
+import vn.bachdao.bookservice.command.command.UpdateBookCommand;
 import vn.bachdao.bookservice.command.event.BookCreatedEvent;
+import vn.bachdao.bookservice.command.event.BookDeletedEvent;
+import vn.bachdao.bookservice.command.event.BookUpdatedEvent;
 
 @Aggregate
 @NoArgsConstructor
@@ -35,6 +39,20 @@ public class BookAggregate {
         AggregateLifecycle.apply(bookCreatedEvent);
     }
 
+    @CommandHandler
+    public void handle(UpdateBookCommand command) {
+        BookUpdatedEvent bookUpdatedEvent = new BookUpdatedEvent();
+        BeanUtils.copyProperties(command, bookUpdatedEvent);
+        AggregateLifecycle.apply(bookUpdatedEvent);
+    }
+
+    @CommandHandler
+    public void handle(DeleteBookCommand command) {
+        BookDeletedEvent bookDeletedEvent = new BookDeletedEvent();
+        BeanUtils.copyProperties(command, bookDeletedEvent);
+        AggregateLifecycle.apply(bookDeletedEvent);
+    }
+
     // listen for event
     @EventSourcingHandler
     public void on(BookCreatedEvent event) {
@@ -42,5 +60,18 @@ public class BookAggregate {
         this.name = event.getName();
         this.author = event.getAuthor();
         this.isReady = event.getIsReady();
+    }
+
+    @EventSourcingHandler
+    public void on(BookUpdatedEvent event) {
+        this.id = event.getId();
+        this.name = event.getName();
+        this.author = event.getAuthor();
+        this.isReady = event.getIsReady();
+    }
+
+    @EventSourcingHandler
+    public void on(BookDeletedEvent event) {
+        this.id = event.getId();
     }
 }
