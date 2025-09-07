@@ -1,5 +1,6 @@
 package vn.bachdao.bookservice.command.controller;
 
+import jakarta.validation.Valid;
 import org.axonframework.commandhandling.gateway.CommandGateway;
 import org.springframework.web.bind.annotation.*;
 import vn.bachdao.bookservice.command.command.CreateBookCommand;
@@ -20,7 +21,7 @@ public class BookCommandController {
     }
 
     @PostMapping
-    public String addBook(@RequestBody BookRequestModel model) {
+    public String addBook(@Valid @RequestBody BookRequestModel model) {
         CreateBookCommand command = new CreateBookCommand(UUID.randomUUID().toString(), model.getName(), model.getAuthor(), true);
         return commandGateway.sendAndWait(command); // return aggregate identifier
     }
