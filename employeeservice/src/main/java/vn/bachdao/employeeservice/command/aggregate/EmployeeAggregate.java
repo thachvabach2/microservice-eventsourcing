@@ -9,8 +9,10 @@ import org.axonframework.modelling.command.AggregateLifecycle;
 import org.axonframework.spring.stereotype.Aggregate;
 import org.springframework.beans.BeanUtils;
 import vn.bachdao.employeeservice.command.command.CreateEmployeeCommand;
+import vn.bachdao.employeeservice.command.command.DeleteEmployeeCommand;
 import vn.bachdao.employeeservice.command.command.UpdateEmployeeCommand;
 import vn.bachdao.employeeservice.command.event.EmployeeCreatedEvent;
+import vn.bachdao.employeeservice.command.event.EmployeeDeletedEvent;
 import vn.bachdao.employeeservice.command.event.EmployeeUpdatedEvent;
 
 @Aggregate
@@ -40,6 +42,13 @@ public class EmployeeAggregate {
         AggregateLifecycle.apply(event);
     }
 
+    @CommandHandler
+    public void handle(DeleteEmployeeCommand command) {
+        EmployeeDeletedEvent event = new EmployeeDeletedEvent();
+        BeanUtils.copyProperties(command, event);
+        AggregateLifecycle.apply(event);
+    }
+
     @EventSourcingHandler
     public void on(EmployeeCreatedEvent event) {
         this.id = event.getId();
@@ -56,5 +65,10 @@ public class EmployeeAggregate {
         this.lastName = event.getLastName();
         this.kin = event.getKin();
         this.isDiscipline = event.getIsDiscipline();
+    }
+
+    @EventSourcingHandler
+    public void on(EmployeeDeletedEvent event) {
+        this.id = event.getId();
     }
 }

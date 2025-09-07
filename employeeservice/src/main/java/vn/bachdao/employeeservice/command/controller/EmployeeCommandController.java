@@ -4,6 +4,7 @@ import jakarta.validation.Valid;
 import org.axonframework.commandhandling.gateway.CommandGateway;
 import org.springframework.web.bind.annotation.*;
 import vn.bachdao.employeeservice.command.command.CreateEmployeeCommand;
+import vn.bachdao.employeeservice.command.command.DeleteEmployeeCommand;
 import vn.bachdao.employeeservice.command.command.UpdateEmployeeCommand;
 import vn.bachdao.employeeservice.command.model.CreateEmployeeModel;
 import vn.bachdao.employeeservice.command.model.UpdateEmployeeModel;
@@ -33,11 +34,17 @@ public class EmployeeCommandController {
     }
 
     @PutMapping("/{employeeId}")
-    public String updateEmployee(@Valid @RequestBody UpdateEmployeeModel model, @PathVariable String employeeId) {
+    public String updateEmployee(@Valid @RequestBody UpdateEmployeeModel model, @PathVariable("employeeId") String employeeId) {
         UpdateEmployeeCommand command = new UpdateEmployeeCommand(employeeId, model.getFirstName(),
                 model.getLastName(),
                 model.getKin(),
                 model.getIsDiscipline());
+        return commandGateway.sendAndWait(command);
+    }
+
+    @DeleteMapping("/{employeeId}")
+    public String deleteEmployee(@PathVariable("employeeId") String employeeId) {
+        DeleteEmployeeCommand command = new DeleteEmployeeCommand(employeeId);
         return commandGateway.sendAndWait(command);
     }
 }
