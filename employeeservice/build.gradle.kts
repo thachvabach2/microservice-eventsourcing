@@ -22,6 +22,7 @@ configurations {
 
 repositories {
 	mavenCentral()
+	mavenLocal()
 }
 
 extra["springCloudVersion"] = "2025.0.0"
@@ -32,6 +33,7 @@ dependencies {
 	implementation("org.springframework.boot:spring-boot-starter-validation")
 	implementation("org.springframework.cloud:spring-cloud-starter-netflix-eureka-client")
 	implementation("org.axonframework:axon-spring-boot-starter:4.12.1")
+	implementation("vn.bachdao:commonservice:0.0.1-SNAPSHOT")
 	compileOnly("org.projectlombok:lombok")
 	runtimeOnly("com.h2database:h2")
 	annotationProcessor("org.projectlombok:lombok")
