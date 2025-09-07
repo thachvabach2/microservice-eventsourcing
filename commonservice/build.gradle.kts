@@ -37,6 +37,10 @@ dependencies {
 tasks.jar {
 	enabled = true
 	archiveClassifier = ""
+
+	exclude("application*.properties")
+	exclude("application*.yml")
+	exclude("application*.yaml")
 }
 
 tasks.bootJar {
