@@ -2,12 +2,11 @@ package vn.bachdao.employeeservice.command.controller;
 
 import jakarta.validation.Valid;
 import org.axonframework.commandhandling.gateway.CommandGateway;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import vn.bachdao.employeeservice.command.command.CreateEmployeeCommand;
+import vn.bachdao.employeeservice.command.command.UpdateEmployeeCommand;
 import vn.bachdao.employeeservice.command.model.CreateEmployeeModel;
+import vn.bachdao.employeeservice.command.model.UpdateEmployeeModel;
 
 import java.util.UUID;
 
@@ -30,6 +29,15 @@ public class EmployeeCommandController {
                 model.getKin(),
                 false);
 
+        return commandGateway.sendAndWait(command);
+    }
+
+    @PutMapping("/{employeeId}")
+    public String updateEmployee(@Valid @RequestBody UpdateEmployeeModel model, @PathVariable String employeeId) {
+        UpdateEmployeeCommand command = new UpdateEmployeeCommand(employeeId, model.getFirstName(),
+                model.getLastName(),
+                model.getKin(),
+                model.getIsDiscipline());
         return commandGateway.sendAndWait(command);
     }
 }
