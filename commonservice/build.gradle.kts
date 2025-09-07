@@ -2,6 +2,7 @@ plugins {
 	java
 	id("org.springframework.boot") version "3.5.5"
 	id("io.spring.dependency-management") version "1.1.7"
+	`maven-publish`
 }
 
 group = "vn.bachdao"
@@ -22,27 +23,39 @@ configurations {
 
 repositories {
 	mavenCentral()
-	mavenLocal()
 }
 
-extra["springCloudVersion"] = "2025.0.0"
-
 dependencies {
-	implementation("org.springframework.boot:spring-boot-starter-data-jpa")
 	implementation("org.springframework.boot:spring-boot-starter-web")
-	implementation("org.springframework.cloud:spring-cloud-starter-netflix-eureka-client")
-	implementation("org.axonframework:axon-spring-boot-starter:4.12.1")
-	implementation("vn.bachdao:commonservice:0.0.1-SNAPSHOT")
 	compileOnly("org.projectlombok:lombok")
-	runtimeOnly("com.h2database:h2")
 	annotationProcessor("org.projectlombok:lombok")
 	testImplementation("org.springframework.boot:spring-boot-starter-test")
 	testRuntimeOnly("org.junit.platform:junit-platform-launcher")
 }
 
-dependencyManagement {
-	imports {
-		mavenBom("org.springframework.cloud:spring-cloud-dependencies:${property("springCloudVersion")}")
+tasks.jar {
+	enabled = true
+	archiveClassifier = ""
+}
+
+tasks.bootJar {
+	enabled = false
+}
+
+publishing {
+	publications {
+		create<MavenPublication>("maven") {
+			from(components["java"])
+
+			versionMapping {
+				usage("java-api") {
+					fromResolutionOf("runtimeClasspath")
+				}
+				usage("java-runtime") {
+					fromResolutionResult()
+				}
+			}
+		}
 	}
 }
 
