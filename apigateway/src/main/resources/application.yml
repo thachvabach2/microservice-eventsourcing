@@ -8,9 +8,12 @@ spring:
     gateway:
       server:
         webflux:
-          routes:
+          discovery:
+            locator:
+              enabled: true
+          routes: #mapping service route
             - id: employeeservice
-              uri: http://localhost:9003
+              uri: lb://employeeservice # lb: load balancing
               predicates:
                 - Path=/api/v1/employees/**
 
