@@ -26,6 +26,7 @@ spring:
                     redis-rate-limiter.replenishRate: 10 # in 1s refill 10 tokens
                     redis-rate-limiter.burstCapacity: 20 # maximum in bucket has 20 tokens
                     redis-rate-limiter.requestedTokens: 1 # 1 request use 1 token
+                - KeyAuthFilter
 
 eureka:
   instance:
