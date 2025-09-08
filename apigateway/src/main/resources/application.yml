@@ -4,6 +4,10 @@ server:
 spring:
   application:
     name: gateway-service
+  data:
+    redis:
+      port: 6379
+      host: localhost
   cloud:
     gateway:
       server:
@@ -16,6 +20,12 @@ spring:
               uri: lb://employeeservice # lb: load balancing
               predicates:
                 - Path=/api/v1/employees/**
+              filters:
+                - name: RequestRateLimiter
+                  args:
+                    redis-rate-limiter.replenishRate: 10 # in 1s refill 10 tokens
+                    redis-rate-limiter.burstCapacity: 20 # maximum in bucket has 20 tokens
+                    redis-rate-limiter.requestedTokens: 1 # 1 request use 1 token
 
 eureka:
   instance:
