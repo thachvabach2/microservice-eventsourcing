@@ -4,6 +4,15 @@ server:
 spring:
   application:
     name: gateway-service
+  cloud:
+    gateway:
+      server:
+        webflux:
+          routes:
+            - id: employeeservice
+              uri: http://localhost:9003
+              predicates:
+                - Path=/api/v1/employees/**
 
 eureka:
   instance:
@@ -11,5 +20,5 @@ eureka:
   client:
     serviceUrl:
       defaultZone: http://localhost:8761/eureka/
-      register-with-eureka: true
-      fetch-registry: true # Register with eureka to know all the ports of the instances of a service
+    register-with-eureka: true
+    fetch-registry: true # Register with eureka to know all the ports of the instances of a service
