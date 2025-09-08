@@ -34,6 +34,7 @@ dependencies {
 	implementation("org.springframework.cloud:spring-cloud-starter-netflix-eureka-client")
 	implementation("org.axonframework:axon-spring-boot-starter:4.12.1")
 	implementation("vn.bachdao:commonservice:0.0.1-SNAPSHOT")
+	implementation("org.springdoc:springdoc-openapi-starter-webmvc-ui:2.8.13")
 	compileOnly("org.projectlombok:lombok")
 	runtimeOnly("com.h2database:h2")
 	annotationProcessor("org.projectlombok:lombok")

@@ -1,5 +1,6 @@
 package vn.bachdao.employeeservice.command.controller;
 
+import io.swagger.v3.oas.annotations.Hidden;
 import jakarta.validation.Valid;
 import org.axonframework.commandhandling.gateway.CommandGateway;
 import org.springframework.web.bind.annotation.*;
@@ -42,6 +43,7 @@ public class EmployeeCommandController {
         return commandGateway.sendAndWait(command);
     }
 
+    @Hidden
     @DeleteMapping("/{employeeId}")
     public String deleteEmployee(@PathVariable("employeeId") String employeeId) {
         DeleteEmployeeCommand command = new DeleteEmployeeCommand(employeeId);
