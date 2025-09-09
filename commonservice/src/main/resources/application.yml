@@ -1,0 +1,7 @@
+spring:
+  application:
+    name: commonservice
+  kafka:
+    bootstrap-servers: localhost:9092
+    consumer:
+      group-id: default-group
