@@ -1,0 +1,15 @@
+server:
+  port: 8888
+
+spring:
+  application:
+    name: config-server-git
+  cloud:
+    config:
+      server:
+        git:
+          uri: "https://github.com/thachvabach2/microservice-eventsourcing-config-server.git"
+          default-label: "main"
+          skip-ssl-validation: true
+          username: "thachvabach2"
+          password: ${GIT_KEY}

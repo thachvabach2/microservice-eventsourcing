@@ -7,4 +7,5 @@ spring:
   kafka:
     consumer:
       group-id: devtaycode # override from commonservice
-
+  config:
+    import: "optional:configserver:"

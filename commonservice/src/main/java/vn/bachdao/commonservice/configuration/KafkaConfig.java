@@ -20,7 +20,7 @@ public class KafkaConfig {
     private String bootstrapServers;
 
     @Value("${spring.kafka.consumer.group-id:default-group}")
-    private  String consumerGroupId;
+    private String consumerGroupId;
 
     @Bean
     public ProducerFactory<String, String> producerFactory() {

@@ -1,0 +1,8 @@
+rootProject.name = "microservices"
+include("apigateway")
+include("bookservice")
+include("commonservice")
+include("discoverserver")
+include("employeeservice")
+include("notificationservice")
+include("configserver")

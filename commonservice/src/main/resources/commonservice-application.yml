@@ -1,0 +1,20 @@
+spring:
+  application:
+    name: commonservice
+  kafka:
+    bootstrap-servers: broker:9092
+    consumer:
+      group-id: default-group
+  mail:
+    host: smtp.gmail.com
+    port: 587
+    username: ngocbach.selfstudy1@gmail.com
+    password: yulc dhlu bpbe dkmv
+    properties:
+      mail:
+        smtp:
+          auth: true
+          starttls:
+            enable: true
+        transport:
+          protocol: smtp
