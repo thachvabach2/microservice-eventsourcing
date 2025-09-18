@@ -7,6 +7,7 @@ dependencies {
 	api("org.springframework.kafka:spring-kafka")
 	implementation("org.springframework.boot:spring-boot-starter-mail")
 	implementation("org.springframework.cloud:spring-cloud-starter-config")
+	implementation("org.springframework.boot:spring-boot-starter-freemarker")
 	compileOnly("org.projectlombok:lombok")
 	annotationProcessor("org.projectlombok:lombok")
 	testImplementation("org.springframework.boot:spring-boot-starter-test")

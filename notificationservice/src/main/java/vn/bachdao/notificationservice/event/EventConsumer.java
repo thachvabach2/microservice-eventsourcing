@@ -11,6 +11,9 @@ import org.springframework.retry.annotation.Backoff;
 import org.springframework.stereotype.Component;
 import vn.bachdao.commonservice.services.EmailService;
 
+import java.util.HashMap;
+import java.util.Map;
+
 @Component
 @Slf4j
 public class EventConsumer {
@@ -55,4 +58,13 @@ public class EventConsumer {
         emailService.sendEmail(message,"Thanks for buy my course",filledTemplate,true,null);
     }
 
+    @KafkaListener(topics = "emailTemplate", containerFactory = "kafkaListenerContainerFactory")
+    public void emailTemplate(String message) {
+        log.info("Received message: {}", message);
+
+        Map<String, Object> placeholders = new HashMap<>();
+        placeholders.put("name", "Dev tay code");
+
+        emailService.sendEmailWithTemplate(message, "Welcome to Halloween", "emailTemplate.ftl", placeholders, null);
+    }
 }
