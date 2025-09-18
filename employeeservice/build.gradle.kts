@@ -8,7 +8,7 @@ dependencies {
 	implementation("org.springframework.boot:spring-boot-starter-validation")
 	implementation("org.springframework.cloud:spring-cloud-starter-netflix-eureka-client")
 	implementation("org.axonframework:axon-spring-boot-starter")
-	implementation("org.springdoc:springdoc-openapi-starter-webmvc-ui:2.8.13")
+	implementation(libs.springdoc.openapi.starter.webmvc.ui)
 	implementation("org.springframework.cloud:spring-cloud-starter-config")
 	compileOnly("org.projectlombok:lombok")
 	runtimeOnly("com.h2database:h2")
