@@ -7,7 +7,9 @@ import org.axonframework.modelling.command.AggregateLifecycle;
 import org.axonframework.spring.stereotype.Aggregate;
 import org.springframework.beans.BeanUtils;
 import vn.bachdao.borrowingservice.command.command.CreateBorrowingCommand;
+import vn.bachdao.borrowingservice.command.command.DeleteBorrowingCommand;
 import vn.bachdao.borrowingservice.command.event.BorrowingCreatedEvent;
+import vn.bachdao.borrowingservice.command.event.BorrowingDeletedEvent;
 
 import java.util.Date;
 
@@ -32,6 +34,12 @@ public class BorrowingAggregate {
         AggregateLifecycle.apply(event);
     }
 
+    @CommandHandler
+    public void handle(DeleteBorrowingCommand command) {
+        BorrowingDeletedEvent event = new BorrowingDeletedEvent(command.getId());
+        AggregateLifecycle.apply(event);
+    }
+
     @EventSourcingHandler
     public void on(BorrowingCreatedEvent event) {
         this.id = event.getId();
@@ -40,5 +48,9 @@ public class BorrowingAggregate {
         this.borrowingDate = event.getBorrowingDate();
     }
 
+    @EventSourcingHandler
+    public void on(BorrowingDeletedEvent event) {
+        this.id = event.getId();
+    }
 
 }

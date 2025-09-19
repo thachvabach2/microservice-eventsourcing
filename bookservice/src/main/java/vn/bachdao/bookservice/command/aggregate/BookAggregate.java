@@ -9,12 +9,17 @@ import org.axonframework.modelling.command.AggregateIdentifier;
 import org.axonframework.modelling.command.AggregateLifecycle;
 import org.axonframework.spring.stereotype.Aggregate;
 import org.springframework.beans.BeanUtils;
+import org.springframework.context.annotation.Bean;
 import vn.bachdao.bookservice.command.command.CreateBookCommand;
 import vn.bachdao.bookservice.command.command.DeleteBookCommand;
 import vn.bachdao.bookservice.command.command.UpdateBookCommand;
 import vn.bachdao.bookservice.command.event.BookCreatedEvent;
 import vn.bachdao.bookservice.command.event.BookDeletedEvent;
 import vn.bachdao.bookservice.command.event.BookUpdatedEvent;
+import vn.bachdao.commonservice.command.RollBackStatusBookCommand;
+import vn.bachdao.commonservice.command.UpdateStatusBookCommand;
+import vn.bachdao.commonservice.event.BookRollBackStatusEvent;
+import vn.bachdao.commonservice.event.BookUpdateStatusEvent;
 
 @Aggregate
 @NoArgsConstructor
@@ -53,6 +58,20 @@ public class BookAggregate {
         AggregateLifecycle.apply(bookDeletedEvent);
     }
 
+    @CommandHandler
+    public void handle(UpdateStatusBookCommand command) {
+        BookUpdateStatusEvent event = new BookUpdateStatusEvent();
+        BeanUtils.copyProperties(command, event);
+        AggregateLifecycle.apply(event);
+    }
+
+    @CommandHandler
+    public void handler(RollBackStatusBookCommand command) {
+        BookRollBackStatusEvent event = new BookRollBackStatusEvent();
+        BeanUtils.copyProperties(command, event);
+        AggregateLifecycle.apply(event);
+    }
+
     // listen for event
     @EventSourcingHandler
     public void on(BookCreatedEvent event) {
@@ -73,5 +92,17 @@ public class BookAggregate {
     @EventSourcingHandler
     public void on(BookDeletedEvent event) {
         this.id = event.getId();
+    }
+
+    @EventSourcingHandler
+    public void on(BookUpdateStatusEvent event) {
+        this.id = event.getBookId();
+        this.isReady = event.getIsReady();
+    }
+
+    @EventSourcingHandler
+    public void on(BookRollBackStatusEvent event) {
+        this.id = event.getBookId();
+        this.isReady = event.getIsReady();
     }
 }

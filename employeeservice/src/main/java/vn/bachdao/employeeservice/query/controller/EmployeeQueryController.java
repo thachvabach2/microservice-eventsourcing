@@ -1,6 +1,5 @@
 package vn.bachdao.employeeservice.query.controller;
 
-import io.swagger.v3.oas.annotations.Hidden;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -8,9 +7,10 @@ import lombok.extern.slf4j.Slf4j;
 import org.axonframework.messaging.responsetypes.ResponseTypes;
 import org.axonframework.queryhandling.QueryGateway;
 import org.springframework.web.bind.annotation.*;
+import vn.bachdao.commonservice.model.EmployeeResponseCommonModel;
 import vn.bachdao.employeeservice.query.model.EmployeeResponseModel;
 import vn.bachdao.employeeservice.query.queries.GetAllEmployeeQuery;
-import vn.bachdao.employeeservice.query.queries.GetDetailEmployeeQuery;
+import vn.bachdao.commonservice.queries.GetDetailEmployeeQuery;
 
 import java.util.List;
 
@@ -49,9 +49,9 @@ public class EmployeeQueryController {
     }
 
     @GetMapping("/{employeeId}")
-    public EmployeeResponseModel getDetailEmployee(@PathVariable("employeeId") String employeeId) {
+    public EmployeeResponseCommonModel getDetailEmployee(@PathVariable("employeeId") String employeeId) {
         GetDetailEmployeeQuery query = new GetDetailEmployeeQuery(employeeId);
 
-        return this.queryGateway.query(query, ResponseTypes.instanceOf(EmployeeResponseModel.class)).join();
+        return this.queryGateway.query(query, ResponseTypes.instanceOf(EmployeeResponseCommonModel.class)).join();
     }
 }

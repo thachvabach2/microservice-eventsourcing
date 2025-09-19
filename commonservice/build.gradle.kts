@@ -1,6 +1,7 @@
 extra["springCloudVersion"] = libs.versions.spring.cloud.get()
 
 dependencies {
+	api(platform(libs.axon.bom))
 	implementation("org.springframework.boot:spring-boot-starter-web")
 	implementation("org.springframework.boot:spring-boot-starter-aop")
 	// api: when diff services import commonservice, so also import this dependency (spring-kafka)
@@ -8,6 +9,7 @@ dependencies {
 	implementation("org.springframework.boot:spring-boot-starter-mail")
 	implementation("org.springframework.cloud:spring-cloud-starter-config")
 	implementation("org.springframework.boot:spring-boot-starter-freemarker")
+	implementation("org.axonframework:axon-spring-boot-starter")
 	compileOnly("org.projectlombok:lombok")
 	annotationProcessor("org.projectlombok:lombok")
 	testImplementation("org.springframework.boot:spring-boot-starter-test")

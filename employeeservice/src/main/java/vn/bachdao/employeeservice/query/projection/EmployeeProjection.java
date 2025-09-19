@@ -3,11 +3,12 @@ package vn.bachdao.employeeservice.query.projection;
 import org.axonframework.queryhandling.QueryHandler;
 import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Component;
+import vn.bachdao.commonservice.model.EmployeeResponseCommonModel;
 import vn.bachdao.employeeservice.command.data.Employee;
 import vn.bachdao.employeeservice.command.data.EmployeeRepository;
 import vn.bachdao.employeeservice.query.model.EmployeeResponseModel;
 import vn.bachdao.employeeservice.query.queries.GetAllEmployeeQuery;
-import vn.bachdao.employeeservice.query.queries.GetDetailEmployeeQuery;
+import vn.bachdao.commonservice.queries.GetDetailEmployeeQuery;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -33,10 +34,10 @@ public class EmployeeProjection {
     }
 
     @QueryHandler
-    public EmployeeResponseModel handle(GetDetailEmployeeQuery query) throws Exception {
+    public EmployeeResponseCommonModel handle(GetDetailEmployeeQuery query) throws Exception {
         Employee employee = this.employeeRepository.findById(query.getId()).orElseThrow(() -> new Exception("Not found Employee with employeeId: " + query.getId()));
 
-        EmployeeResponseModel employeeResponseModel = new EmployeeResponseModel();
+        EmployeeResponseCommonModel employeeResponseModel = new EmployeeResponseCommonModel();
         BeanUtils.copyProperties(employee, employeeResponseModel);
         return employeeResponseModel;
     }

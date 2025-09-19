@@ -6,11 +6,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import vn.bachdao.bookservice.query.model.BookResponseModel;
 import vn.bachdao.bookservice.query.queries.GetAllBookQuery;
-import vn.bachdao.bookservice.query.queries.GetBookDetailQuery;
+import vn.bachdao.commonservice.model.BookResponseCommonModel;
+import vn.bachdao.commonservice.queries.GetBookDetailQuery;
 import vn.bachdao.commonservice.services.KafkaService;
 
 import java.util.List;
-import java.util.concurrent.CompletableFuture;
 
 @RestController
 @RequestMapping("/api/v1/books")
@@ -28,9 +28,9 @@ public class BookQueryController {
     }
 
     @GetMapping("/{bookId}")
-    public BookResponseModel getBookDetail(@PathVariable String bookId) {
+    public BookResponseCommonModel getBookDetail(@PathVariable String bookId) {
         GetBookDetailQuery query = new GetBookDetailQuery(bookId);
-        return this.queryGateway.query(query, ResponseTypes.instanceOf(BookResponseModel.class)).join();
+        return this.queryGateway.query(query, ResponseTypes.instanceOf(BookResponseCommonModel.class)).join();
     }
 
     @PostMapping("/sendMessage")

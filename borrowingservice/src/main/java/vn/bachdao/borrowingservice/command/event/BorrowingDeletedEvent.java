@@ -1,4 +1,4 @@
-package vn.bachdao.bookservice.query.queries;
+package vn.bachdao.borrowingservice.command.event;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -7,7 +7,7 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class GetBookDetailQuery {
+public class BorrowingDeletedEvent {
 
     private String id;
 }

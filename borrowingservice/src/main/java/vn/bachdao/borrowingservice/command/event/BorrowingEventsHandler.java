@@ -6,6 +6,8 @@ import org.springframework.stereotype.Component;
 import vn.bachdao.borrowingservice.command.data.Borrowing;
 import vn.bachdao.borrowingservice.command.data.BorrowingRepository;
 
+import java.util.Optional;
+
 @Component
 public class BorrowingEventsHandler {
 
@@ -20,5 +22,11 @@ public class BorrowingEventsHandler {
         model.setBookId(event.getBookId());
         model.setEmployeeId(event.getEmployeeId());
         this.borrowingRepository.save(model);
+    }
+
+    @EventHandler
+    public void on(BorrowingDeletedEvent event) {
+        Optional<Borrowing> oldEntity = this.borrowingRepository.findById(event.getId());
+        oldEntity.ifPresent(this.borrowingRepository::delete);
     }
 }
