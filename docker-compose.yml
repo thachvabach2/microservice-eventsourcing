@@ -1,0 +1,75 @@
+services:
+  configserver:
+    build:
+      context: .
+      dockerfile: configserver/Dockerfile
+    ports:
+      - 8888:8888
+    environment:
+      - GIT_KEY=${GIT_KEY}
+    networks:
+      - microservice-networks
+    healthcheck:
+      test: [ "CMD", "curl", "-f", "http://localhost:8888/actuator/health" ]
+      interval: 30s
+      timeout: 10s
+      retries: 2
+      start_period: 60s
+  discoverserver:
+    build:
+      context: .
+      dockerfile: discoverserver/Dockerfile
+    ports:
+      - 8761:8761
+    depends_on:
+      configserver:
+        condition: service_healthy
+    networks:
+      - microservice-networks
+    healthcheck:
+      test: [ "CMD", "curl", "-f", "http://localhost:8761/actuator/health" ]
+      interval: 30s
+      timeout: 10s
+      retries: 2
+      start_period: 60s
+  bookservice:
+    build:
+      context: .
+      dockerfile: bookservice/Dockerfile
+    ports:
+      - 9002:9002
+    networks:
+      - microservice-networks
+    depends_on:
+      discoverserver:
+        condition: service_healthy
+      axonserver:
+        condition: service_healthy
+      configserver:
+        condition: service_healthy
+    environment:
+      - AXONIQ_AXONSERVER_SERVERS=axonserver:8024
+      - SPRING_CLOUD_CONFIG_URI=http://configserver:8888
+      - EUREKA_URL=http://discoverserver:8761/eureka/
+  axonserver:
+    image: "axoniq/axonserver:latest"
+    hostname: axonserver
+    container_name: axonserver
+    environment:
+      - AXONIQ_AXONSERVER_STANDALONE=TRUE
+    ports:
+      - 8024:8024
+      - 8124:8124
+      - 8224:8224
+    networks:
+      - microservice-networks
+    healthcheck:
+      test: [ "CMD", "curl", "-f", "http://localhost:8024/actuator/health" ]
+      interval: 30s
+      timeout: 10s
+      retries: 5
+      start_period: 30s
+
+networks:
+  microservice-networks:
+    driver: bridge
