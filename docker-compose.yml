@@ -83,6 +83,8 @@ services:
     environment:
       - EUREKA_HOSTNAME=discoverserver
       - EUREKA_URL=http://discoverserver:8761/eureka/
+      - REDIS_HOST=redis
+      - REDIS_PORT=6379
   axonserver:
     image: "axoniq/axonserver:latest"
     hostname: axonserver
