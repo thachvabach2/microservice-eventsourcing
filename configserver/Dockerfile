@@ -1,3 +1,4 @@
+# Stage 1: Build the application
 FROM gradle:8.7-jdk17 AS build
 WORKDIR /app
 
@@ -10,6 +11,7 @@ COPY configserver/ ./configserver/
 #skip task: test
 RUN gradle :configserver:clean :configserver:build -x test --no-daemon
 
+# Stage 2: use OpenJDK for running
 FROM openjdk:17-slim
 WORKDIR /app
 
