@@ -5,7 +5,11 @@ spring:
   application:
     name: notificationservice
   kafka:
+    bootstrap-servers: ${KAFKA_BOOTSTRAP_SERVERS:localhost:9092}
     consumer:
       group-id: devtaycode # override from commonservice
+  cloud:
+    config:
+      uri: http://localhost:8888
   config:
     import: "optional:configserver:"
