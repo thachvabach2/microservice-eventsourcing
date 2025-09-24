@@ -1,11 +1,18 @@
 package vn.bachdao.userservice.service.impl;
 
+import lombok.experimental.NonFinal;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import vn.bachdao.userservice.dto.CreateUserRequestDTO;
 import vn.bachdao.userservice.dto.UserResponseDTO;
+import vn.bachdao.userservice.dto.identity.Credential;
+import vn.bachdao.userservice.dto.identity.request.TokenExchangeParam;
+import vn.bachdao.userservice.dto.identity.request.UserCreationParam;
 import vn.bachdao.userservice.entity.User;
+import vn.bachdao.userservice.repository.IdentityClient;
 import vn.bachdao.userservice.repository.UserRepository;
 import vn.bachdao.userservice.service.IUserService;
 
@@ -20,10 +27,46 @@ public class UserServiceImpl implements IUserService {
     @Autowired
     private UserRepository userRepository;
 
+    @Autowired
+    private IdentityClient identityClient;
+
+    @Value("${idp.client-id}")
+    @NonFinal
+    String clientId;
+
+    @Value("${idp.client-secret}")
+    @NonFinal
+    String clientSecret;
+
     @Override
     public UserResponseDTO createUser(CreateUserRequestDTO dto) {
+        var token = this.identityClient.exchangeClientToken(TokenExchangeParam.builder()
+                .grant_type("client_credentials")
+                .client_secret(clientSecret)
+                .client_id(clientId)
+                .scope("openid")
+                .build());
+
+        log.info("Token info {}", token);
+        var creationResponse = this.identityClient.createUser(UserCreationParam.builder()
+                        .username(dto.getUsername())
+                        .firstName(dto.getFirstName())
+                        .lastName(dto.getLastName())
+                        .email(dto.getEmail())
+                        .enabled(true)
+                        .emailVerified(false)
+                        .credentials(List.of(Credential.builder()
+                                .type("password")
+                                .temporary(false)
+                                .value(dto.getPassword())
+                                .build()))
+                        .build(), "Bearer " + token.getAccessToken());
+
+        String userId = this.extractUserId(creationResponse);
+        log.info("UserId {}", userId);
+
         User user = new User();
-        user.setUserId(UUID.randomUUID().toString());
+        user.setUserId(userId);
         user.setEmail(dto.getEmail());
         user.setUsername(dto.getUsername());
         user.setFirstName(dto.getFirstName());
@@ -78,5 +121,16 @@ public class UserServiceImpl implements IUserService {
                 .name(user.getName())
                 .id(user.getId())
                 .build();
+    }
+
+    private String extractUserId(ResponseEntity<?> response) {
+        List<String> locations = response.getHeaders().get("Location");
+        if (locations == null || locations.isEmpty()) {
+            throw new IllegalStateException("Location header is missing in the response");
+        }
+
+        String location = locations.get(0);
+        String[] splitedStr = location.split("/");
+        return splitedStr[splitedStr.length - 1];
     }
 }

@@ -21,3 +21,9 @@ spring:
     properties:
       hibernate:
         dialect: org.hibernate.dialect.MySQL8Dialect
+
+idp:
+  url: http://localhost:8180
+  client-id: devtaycode_app
+  client-secret: bhf2E11J7robXaVcv88ZlS8wcbbBdoEK
+  realm: devtaycode
