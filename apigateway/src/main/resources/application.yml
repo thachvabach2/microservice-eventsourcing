@@ -38,6 +38,19 @@ spring:
                     redis-rate-limiter.burstCapacity: 20 # maximum in bucket has 20 tokens
                     redis-rate-limiter.requestedTokens: 1 # 1 request use 1 token
                 - KeyAuthFilter
+            - id: userservice
+              uri: http://localhost:9006
+              predicates:
+                - Path=/api/v1/users/**
+            - id: userservice-auth
+              uri: http://localhost:9006
+              predicates:
+                - Path=/api/v1/auth/**
+  security:
+    oauth2:
+      resourceserver:
+        jwt:
+          issuer-uri: http://localhost:8180/realms/devtaycode
 
 eureka:
   instance:
