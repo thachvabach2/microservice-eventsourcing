@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;
 import vn.bachdao.userservice.dto.identity.request.TokenExchangeParam;
 import vn.bachdao.userservice.dto.identity.request.UserCreationParam;
+import vn.bachdao.userservice.dto.identity.request.UserTokenExchangeParam;
 import vn.bachdao.userservice.dto.identity.response.TokenExchangeResponse;
 
 @FeignClient(name = "identity-client", url = "${idp.url}")
@@ -22,8 +23,14 @@ public interface IdentityClient {
     TokenExchangeResponse exchangeClientToken(@QueryMap() TokenExchangeParam param);
 
     @PostMapping (
-            value = "admin/realms/devtaycode/users",
+            value = "/admin/realms/devtaycode/users",
             consumes = MediaType.APPLICATION_JSON_VALUE
     )
     ResponseEntity<?> createUser(@RequestBody() UserCreationParam body, @RequestHeader("authorization") String token);
+
+    @PostMapping(
+            value = "/realms/devtaycode/protocol/openid-connect/token",
+            consumes = MediaType.APPLICATION_FORM_URLENCODED_VALUE
+    )
+    TokenExchangeResponse exchangeUserToken(@QueryMap UserTokenExchangeParam param);
 }

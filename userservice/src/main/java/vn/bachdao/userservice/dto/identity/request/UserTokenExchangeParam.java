@@ -7,11 +7,12 @@ import lombok.experimental.FieldDefaults;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-@FieldDefaults(level = AccessLevel.PRIVATE)
-public class TokenExchangeParam {
-
+@FieldDefaults(level = AccessLevel.PRIVATE) // generate access-modifier is Private for all attributes.
+public class UserTokenExchangeParam{
     String grant_type;
     String client_id;
     String client_secret;
     String scope;
+    String username;
+    String password;
 }
