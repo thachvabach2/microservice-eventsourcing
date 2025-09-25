@@ -1,6 +1,7 @@
 /Software
 HELP.md
 .gradle
+k8s.deploy.yaml
 **/build/
 !gradle/wrapper/gradle-wrapper.jar
 !**/src/main/**/build/

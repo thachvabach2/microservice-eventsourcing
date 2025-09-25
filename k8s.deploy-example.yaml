@@ -1,0 +1,120 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: discoverserver
+  labels:
+    app: discoverserver
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: discoverserver
+  template:
+    metadata:
+      labels:
+        app: discoverserver
+    spec:
+      containers:
+      - name: discoverserver
+        image: eventsourcing-discoverserver
+        imagePullPolicy: IfNotPresent
+        ports:
+        - containerPort: 8761
+
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: apigateway
+  labels:
+    app: apigateway
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: apigateway
+  template:
+    metadata:
+      labels:
+        app: apigateway
+    spec:
+      containers:
+      - name: apigateway
+        image: eventsourcing-apigateway
+        imagePullPolicy: IfNotPresent
+        ports:
+        - containerPort: 8081
+        env:
+        - name: EUREKA_HOSTNAME
+          value: "discoverserver"
+        - name: EUREKA_URL
+          value: "http://discoverserver:8761/eureka/"
+
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: configserver
+  labels:
+    app: configserver
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: configserver
+  template:
+    metadata:
+      labels:
+        app: configserver
+    spec:
+      containers:
+      - name: configserver
+        image: eventsourcing-configserver
+        imagePullPolicy: IfNotPresent
+        ports:
+        - containerPort: 8888
+        env:
+        - name: GIT_KEY
+          value: GIT_KEY_VALUE
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: discoverserver
+spec:
+  selector:
+    app: discoverserver
+  ports:
+    - protocol: TCP
+      port: 8761
+      targetPort: 8761
+  type: NodePort
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: apigateway
+spec:
+  selector:
+    app: apigateway
+  ports:
+    - protocol: TCP
+      port: 8081 # in browser
+      targetPort: 8081 # in container
+  type: NodePort
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: configserver
+spec:
+  selector:
+    app: configserver
+  ports:
+    - protocol: TCP
+      port: 8888
+      targetPort: 8888
+  type: NodePort
