@@ -17,8 +17,8 @@ services:
       start_period: 60s
   discoverserver:
     build:
-      context: .
-      dockerfile: discoverserver/Dockerfile
+      context: /root/app
+      dockerfile: microservice-eventsourcing/discoverserver/Dockerfile
     ports:
       - 8761:8761
     depends_on:

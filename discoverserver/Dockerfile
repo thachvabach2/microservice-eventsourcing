@@ -16,6 +16,6 @@ FROM openjdk:17-slim
 WORKDIR /app
 
 RUN apt-get update && apt-get install -y curl && apt-get clean && rm -rf /var/lib/apt/lists/*
-COPY ../../build-jar-from-local/discoverserver-0.0.1-SNAPSHOT.jar discoverserver.jar
+COPY build-jar-from-local/discoverserver-0.0.1-SNAPSHOT.jar discoverserver.jar
 EXPOSE 8761
 ENTRYPOINT ["java", "-jar", "discoverserver.jar"]
