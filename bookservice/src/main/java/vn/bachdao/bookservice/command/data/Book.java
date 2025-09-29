@@ -18,5 +18,7 @@ public class Book {
 
     private String name;
     private String author;
+
+    @Column(name = "is_ready")
     private Boolean isReady;
 }
