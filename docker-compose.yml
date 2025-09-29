@@ -3,6 +3,7 @@ services:
     build:
       context: .
       dockerfile: configserver/Dockerfile
+    image: "${DOCKER_USERNAME}/configserver:latest"
     ports:
       - 8888:8888
     environment:
@@ -19,6 +20,7 @@ services:
     build:
       context: .
       dockerfile: discoverserver/Dockerfile
+    image: "${DOCKER_USERNAME}/discoverserver:latest"
     ports:
       - 8761:8761
     depends_on:
