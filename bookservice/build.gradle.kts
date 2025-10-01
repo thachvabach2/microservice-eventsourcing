@@ -10,6 +10,7 @@ dependencies {
 	implementation("org.axonframework:axon-spring-boot-starter")
 	implementation("org.springframework.cloud:spring-cloud-starter-config")
 	implementation("org.liquibase:liquibase-core")
+	implementation("org.axonframework:axon-tracing-opentelemetry")
 	compileOnly("org.projectlombok:lombok")
 	runtimeOnly("com.mysql:mysql-connector-j")
 	annotationProcessor("org.projectlombok:lombok")

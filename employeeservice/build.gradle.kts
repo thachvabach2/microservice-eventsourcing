@@ -10,6 +10,7 @@ dependencies {
 	implementation("org.axonframework:axon-spring-boot-starter")
 	implementation(libs.springdoc.openapi.starter.webmvc.ui)
 	implementation("org.springframework.cloud:spring-cloud-starter-config")
+	implementation("org.axonframework:axon-tracing-opentelemetry")
 	compileOnly("org.projectlombok:lombok")
 	runtimeOnly("com.h2database:h2")
 	annotationProcessor("org.projectlombok:lombok")
