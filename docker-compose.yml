@@ -50,6 +50,7 @@ services:
       configserver:
         condition: service_healthy
     environment:
+      - AXON_AXONSERVER_SERVERS=axonserver:8124
       - AXONIQ_AXONSERVER_SERVERS=axonserver:8024
       - SPRING_CLOUD_CONFIG_URI=http://configserver:8888
       - EUREKA_URL=http://discoverserver:8761/eureka/
